@@ -98,10 +98,10 @@
 
     (teardown! [_ test node]
       (when (= jdbc-mode :cdb-cluster)
-        (auto/reset-clock!)
+        ;; (auto/reset-clock!)
 
         (c/su
-          (auto/kill! test node)
+          ;; (auto/kill! test node)
 
           (info node "Erasing the store...")
           (c/exec :rm :-rf store-path)
