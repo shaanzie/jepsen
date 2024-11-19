@@ -12,7 +12,7 @@
             [jepsen.os.debian :as debian])
   (:import (java.io File)))
 
-(def cockroach-user "User to run cockroachdb as" "cockroach")
+(def cockroach-user "User to run cockroachdb as" "ishaan")
 
 (def tcpdump "Local path to tcpdump binary" "/usr/sbin/tcpdump")
 
@@ -161,14 +161,15 @@
   (concat
    [;;:env
     ;;:COCKROACH_TIME_UNTIL_STORE_DEAD=5s
-    :start-stop-daemon
-    :--start :--background
-    :--make-pidfile
-    :--pidfile pidfile
-    :--no-close
-    :--chuid cockroach-user
-    :--chdir binary-path
-    :--exec (c/expand-path cockroach)
+    ;; :start-stop-daemon
+    ;; :--start :--background
+    ;; :--make-pidfile
+    ;; :--pidfile pidfile
+    ;; :--no-close
+    ;; :--chuid cockroach-user
+    ;; :--chdir binary-path
+    ;; :--exec (c/expand-path cockroach)
+    :cockroach
     :--]
    cockroach-start-arguments
    extra-args
@@ -177,30 +178,24 @@
 (defn runcmd
   "The command to run cockroach for a given test"
   [test node joining?]
-  (let [join (if joining?
-               [(->> (:nodes test)
-                     (remove #{node})
-                     (map name)
-                     (str/join ",")
-                     (str "--join="))]
-               [])]
+  ([]
     (wrap-env [(str "COCKROACH_LINEARIZABLE="
                     (if (:linearizable test) "true" "false"))
                (str "COCKROACH_MAX_OFFSET=" "250ms")]
-              (cockroach-start-cmdline join))))
+              (cockroach-start-cmdline))))
 
 (defn start!
   "Start cockroachdb on node."
   [test node]
-  (c/sudo cockroach-user
-          (if (not= "" (try
-                         (c/exec :pgrep :cockroach)
-                         (catch RuntimeException e "")))
-            (info node "Cockroach already running.")
-            (do (info node "Starting CockroachDB...")
-                (c/trace (c/exec (runcmd test node
-                                         (not= node (jepsen/primary test)))))
-                (info node "Cockroach started"))))
+  ;; (c/sudo cockroach-user
+  ;;         (if (not= "" (try
+  ;;                        (c/exec :pgrep :cockroach)
+  ;;                        (catch RuntimeException e "")))
+  ;;           (info node "Cockroach already running.")
+  ;;           (do (info node "Starting CockroachDB...")
+  ;;               (c/trace (c/exec (runcmd test node
+  ;;                                        (not= node (jepsen/primary test)))))
+  ;;               (info node "Cockroach started"))))
   :started)
 
 (defn kill!
