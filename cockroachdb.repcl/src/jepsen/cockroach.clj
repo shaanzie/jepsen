@@ -47,8 +47,7 @@
   (reify db/DB
     (setup! [_ test node]
       (when (= node (jepsen/primary test))
-        (
-          ;; store/with-out-file test "jepsen-version.txt"
+        (store/with-out-file test "jepsen-version.txt"
           (meh (->> (sh "git" "describe" "--tags")
                     (:out)
                     (print)))))
@@ -56,7 +55,7 @@
       (when (= jdbc-mode :cdb-cluster)
         ;; (auto/install! test node)
         ;; (auto/reset-clock!)
-        (jepsen/synchronize test)
+        ;; (jepsen/synchronize test)
 
         (c/sudo cockroach-user
                 (when (= node (jepsen/primary test))
@@ -65,7 +64,7 @@
 
                 (jepsen/synchronize test)
                 (auto/packet-capture! node)
-                (auto/save-version! node)
+                ;; (auto/save-version! node)
 
                 (when (not= node (jepsen/primary test))
                   ;; (auto/start! test node)
@@ -99,10 +98,10 @@
 
     (teardown! [_ test node]
       (when (= jdbc-mode :cdb-cluster)
-        ;; (auto/reset-clock!)
+        (auto/reset-clock!)
 
         (c/su
-          ;; (auto/kill! test node)
+          (auto/kill! test node)
 
           (info node "Erasing the store...")
           (c/exec :rm :-rf store-path)
@@ -114,11 +113,11 @@
           (doseq [f log-files]
             (when (cu/exists? f)
               (c/exec :truncate :-c :--size 0 f)
-              ;; (c/exec :chown cockroach-user f)))
-      )))
+              ;; (c/exec :chown cockroach-user f)
+        )))))
 
     db/LogFiles
-    (log-files [_ test node] log-files)))))
+    (log-files [_ test node] log-files)))
 
 (defn update-keyrange!
   "A keyrange is used to track which keys a test is using, so we can split
