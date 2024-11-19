@@ -53,13 +53,13 @@
                     (print)))))
 
       (when (= jdbc-mode :cdb-cluster)
-        (auto/install! test node)
-        (auto/reset-clock!)
+        ;; (auto/install! test node)
+        ;; (auto/reset-clock!)
         (jepsen/synchronize test)
 
         (c/sudo cockroach-user
                 (when (= node (jepsen/primary test))
-                  (auto/start! test node)
+                  ;; (auto/start! test node)
                   (Thread/sleep 5000))
 
                 (jepsen/synchronize test)
@@ -67,30 +67,30 @@
                 (auto/save-version! node)
 
                 (when (not= node (jepsen/primary test))
-                  (auto/start! test node)
+                  ;; (auto/start! test node)
                   (Thread/sleep 5000)) ; Give it time to join
 
                 (jepsen/synchronize test)
                 (when (= node (jepsen/primary test))
-                  (auto/set-replication-zone! ".default"
-                                              {:range_min_bytes 1024
-                                               :range_max_bytes 1048576})
+                  ;; (auto/set-replication-zone! ".default"
+                  ;;                             {:range_min_bytes 1024
+                  ;;                              :range_max_bytes 1048576})
                   (info node "Creating database...")
                   (auto/csql! (str "create database " dbname)))
 
                 ; Restart cluster to work around balancing bug
                 (jepsen/synchronize test)
-                (auto/kill! test node)
+                ;; (auto/kill! test node)
 
                 (jepsen/synchronize test)
                 (when (= node (jepsen/primary test))
-                  (auto/start! test node)
+                  ;; (auto/start! test node)
                   (Thread/sleep 5000)
                   (info node "Restarted to work around balancing bug"))
 
                 (jepsen/synchronize test)
                 (when (not= node (jepsen/primary test))
-                  (auto/start! test node)
+                  ;; (auto/start! test node)
                   (Thread/sleep 5000) ; Give it time to join
                   (info node "Restarted to work around balancing bug")))
 
@@ -98,10 +98,10 @@
 
     (teardown! [_ test node]
       (when (= jdbc-mode :cdb-cluster)
-        (auto/reset-clock!)
+        ;; (auto/reset-clock!)
 
         (c/su
-          (auto/kill! test node)
+          ;; (auto/kill! test node)
 
           (info node "Erasing the store...")
           (c/exec :rm :-rf store-path)

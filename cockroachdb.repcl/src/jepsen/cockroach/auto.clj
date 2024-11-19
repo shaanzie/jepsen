@@ -21,7 +21,7 @@
   :pg-local  Send the test SQL to a PostgreSQL database.
   :cdb-local  Send the test SQL to a preconfigured local CockroachDB instance.
   :cdb-cluster Send the test SQL to the CockroachDB cluster set up by the framework."
-  :cdb-local)
+  :cdb-cluster)
 
 ;; CockroachDB user and db name for jdbc-mode = :cdb-*
 (def db-user "root")
