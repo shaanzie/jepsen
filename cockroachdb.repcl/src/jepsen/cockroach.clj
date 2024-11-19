@@ -146,7 +146,7 @@
                      (str ":" (:name (:nemesis opts)))
                      "-fake"))
      :db      (db opts)
-     :os      (if (= jdbc-mode :cdb-cluster) ubuntu/os os/noop)
+     :os      (if (= jdbc-mode :cdb-cluster) os/noop os/noop)
      :client  (:client (:client opts))
      :nemesis (if (= jdbc-mode :cdb-cluster)
                 (:client (:nemesis opts))
