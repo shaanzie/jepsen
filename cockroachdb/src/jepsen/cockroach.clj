@@ -53,7 +53,7 @@
                     (print)))))
 
       (when (= jdbc-mode :cdb-cluster)
-        (auto/install! test node)
+        ;; (auto/install! test node)
         (auto/reset-clock!)
         (jepsen/synchronize test)
 
@@ -72,9 +72,6 @@
 
                 (jepsen/synchronize test)
                 (when (= node (jepsen/primary test))
-                  (auto/set-replication-zone! ".default"
-                                              {:range_min_bytes 1024
-                                               :range_max_bytes 1048576})
                   (info node "Creating database...")
                   (auto/csql! (str "create database " dbname)))
 
