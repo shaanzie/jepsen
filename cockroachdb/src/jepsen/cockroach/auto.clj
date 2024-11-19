@@ -164,7 +164,6 @@
     :start-stop-daemon
     :--start :--background
     :--make-pidfile
-    :--remove-pidfile
     :--pidfile pidfile
     :--no-close
     :--chuid cockroach-user
