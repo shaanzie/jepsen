@@ -118,7 +118,7 @@
       )))
 
     db/LogFiles
-    (log-files [_ test node] log-files)))
+    (log-files [_ test node] log-files)))))
 
 (defn update-keyrange!
   "A keyrange is used to track which keys a test is using, so we can split
