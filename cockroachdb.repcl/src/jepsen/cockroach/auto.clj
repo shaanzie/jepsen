@@ -12,7 +12,7 @@
             [jepsen.os.debian :as debian])
   (:import (java.io File)))
 
-(def cockroach-user "User to run cockroachdb as" "cockroach")
+(def cockroach-user "User to run cockroachdb as" "ishaan")
 
 (def tcpdump "Local path to tcpdump binary" "/usr/sbin/tcpdump")
 
@@ -21,7 +21,7 @@
   :pg-local  Send the test SQL to a PostgreSQL database.
   :cdb-local  Send the test SQL to a preconfigured local CockroachDB instance.
   :cdb-cluster Send the test SQL to the CockroachDB cluster set up by the framework."
-  :cdb-cluster)
+  :cdb-local)
 
 ;; CockroachDB user and db name for jdbc-mode = :cdb-*
 (def db-user "root")
@@ -30,13 +30,13 @@
 (def dbname "jepsen") ; will get created automatically
 
 ;; Paths
-(def working-path "Home directory for cockroach setup" "/opt/cockroach")
-(def cockroach "Cockroach binary" (str working-path "/cockroach"))
+(def working-path "Home directory for cockroach setup" "/var/lib/cockroach")
+(def cockroach "Cockroach binary" (str "/usr/local/bin/cockroach"))
 (def store-path "Cockroach data dir" (str working-path "/cockroach-data"))
 (def pidfile "Cockroach PID file" (str working-path "/pid"))
 
 ; Logs
-(def log-path "Log directory" (str working-path "/logs"))
+(def log-path "Log directory" (str store-path "/logs"))
 (def verlog "Version log file" (str log-path "/version.txt"))
 (def pcaplog "pcap log file" (str log-path "/trace.pcap"))
 (def errlog (str log-path "/cockroach.stderr"))
