@@ -47,7 +47,8 @@
   (reify db/DB
     (setup! [_ test node]
       (when (= node (jepsen/primary test))
-        (store/with-out-file test "jepsen-version.txt"
+        (
+          ;; store/with-out-file test "jepsen-version.txt"
           (meh (->> (sh "git" "describe" "--tags")
                     (:out)
                     (print)))))
@@ -113,7 +114,8 @@
           (doseq [f log-files]
             (when (cu/exists? f)
               (c/exec :truncate :-c :--size 0 f)
-              (c/exec :chown cockroach-user f))))))
+              ;; (c/exec :chown cockroach-user f)))
+      )))
 
     db/LogFiles
     (log-files [_ test node] log-files)))
