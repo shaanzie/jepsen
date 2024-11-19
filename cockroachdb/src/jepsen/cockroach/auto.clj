@@ -215,9 +215,11 @@
 (defn reset-clock!
   "Reset clock on this host. Logs output."
   []
-  (info c/*host* "clock reset:" (c/su (c/exec :ntpdate :-b ntpserver))))
+  ;; (info c/*host* "clock reset:" (c/su (c/exec :ntpdate :-b ntpserver)))
+  )
 
 (defn reset-clocks!
   "Reset all clocks on all nodes in a test"
   [test]
-  (c/with-test-nodes test (reset-clock!)))
+  ;; (c/with-test-nodes test (reset-clock!))
+  )

@@ -21,18 +21,18 @@
 
       (c/su
        ;; Packages!
-       (debian/install [:wget
-                        :curl
-                        :vim
-                        :man-db
-                        :faketime
-                        :unzip
-                        :ntpdate
-                        :iptables
-                        :iputils-ping
-                        :rsyslog
-                        :tcpdump
-                        :logrotate])
+      ;;  (debian/install [:wget
+      ;;                   :curl
+      ;;                   :vim
+      ;;                   :man-db
+      ;;                   :faketime
+      ;;                   :unzip
+      ;;                   :ntpdate
+      ;;                   :iptables
+      ;;                   :iputils-ping
+      ;;                   :rsyslog
+      ;;                   :tcpdump
+      ;;                   :logrotate])
        ;; This occasionally fails (roughly 1% of the time) for no apparent reason
        ;; (no log messages I've been able to find). Sometimes it fails
        ;; several times in a row. Keep trying until the process is
