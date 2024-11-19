@@ -98,7 +98,7 @@
         ;; (auto/reset-clock!)
 
         (c/su
-          (auto/kill! test node)
+          ;; (auto/kill! test node)
 
           (info node "Erasing the store...")
           (c/exec :rm :-rf store-path)
