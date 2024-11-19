@@ -54,7 +54,7 @@
 
       (when (= jdbc-mode :cdb-cluster)
         ;; (auto/install! test node)
-        (auto/reset-clock!)
+        ;; (auto/reset-clock!)
         (jepsen/synchronize test)
 
         (c/sudo cockroach-user
@@ -95,7 +95,7 @@
 
     (teardown! [_ test node]
       (when (= jdbc-mode :cdb-cluster)
-        (auto/reset-clock!)
+        ;; (auto/reset-clock!)
 
         (c/su
           (auto/kill! test node)
