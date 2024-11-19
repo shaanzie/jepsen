@@ -57,39 +57,39 @@
         ;; (auto/reset-clock!)
         (jepsen/synchronize test)
 
-        (c/sudo cockroach-user
-                (when (= node (jepsen/primary test))
-                  (auto/start! test node)
-                  (Thread/sleep 5000))
+        ;; (c/sudo cockroach-user
+        ;;         (when (= node (jepsen/primary test))
+        ;;           (auto/start! test node)
+        ;;           (Thread/sleep 5000))
 
-                (jepsen/synchronize test)
-                (auto/packet-capture! node)
-                (auto/save-version! node)
+        ;;         (jepsen/synchronize test)
+        ;;         (auto/packet-capture! node)
+        ;;         (auto/save-version! node)
 
-                (when (not= node (jepsen/primary test))
-                  (auto/start! test node)
-                  (Thread/sleep 5000)) ; Give it time to join
+        ;;         (when (not= node (jepsen/primary test))
+        ;;           (auto/start! test node)
+        ;;           (Thread/sleep 5000)) ; Give it time to join
 
-                (jepsen/synchronize test)
-                (when (= node (jepsen/primary test))
-                  (info node "Creating database...")
-                  (auto/csql! (str "create database " dbname)))
+        ;;         (jepsen/synchronize test)
+        ;;         (when (= node (jepsen/primary test))
+        ;;           (info node "Creating database...")
+        ;;           (auto/csql! (str "create database " dbname)))
 
-                ; Restart cluster to work around balancing bug
-                (jepsen/synchronize test)
-                (auto/kill! test node)
+        ;;         ; Restart cluster to work around balancing bug
+        ;;         (jepsen/synchronize test)
+        ;;         (auto/kill! test node)
 
-                (jepsen/synchronize test)
-                (when (= node (jepsen/primary test))
-                  (auto/start! test node)
-                  (Thread/sleep 5000)
-                  (info node "Restarted to work around balancing bug"))
+        ;;         (jepsen/synchronize test)
+        ;;         (when (= node (jepsen/primary test))
+        ;;           (auto/start! test node)
+        ;;           (Thread/sleep 5000)
+        ;;           (info node "Restarted to work around balancing bug"))
 
-                (jepsen/synchronize test)
-                (when (not= node (jepsen/primary test))
-                  (auto/start! test node)
-                  (Thread/sleep 5000) ; Give it time to join
-                  (info node "Restarted to work around balancing bug")))
+        ;;         (jepsen/synchronize test)
+        ;;         (when (not= node (jepsen/primary test))
+        ;;           (auto/start! test node)
+        ;;           (Thread/sleep 5000) ; Give it time to join
+        ;;           (info node "Restarted to work around balancing bug")))
 
         (info node "Setup complete")))
 
