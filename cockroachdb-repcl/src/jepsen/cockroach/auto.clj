@@ -30,13 +30,14 @@
 (def dbname "jepsen") ; will get created automatically
 
 ;; Paths
-(def working-path "Home directory for cockroach setup" "/opt/cockroach")
-(def cockroach "Cockroach binary" (str working-path "/cockroach"))
+(def working-path "Home directory for cockroach setup" "/var/lib/cockroach")
+(def binary-path "Home directory for cockroach binaries" "/usr/local/bin")
+(def cockroach "Cockroach binary" (str binary-path "/cockroach"))
 (def store-path "Cockroach data dir" (str working-path "/cockroach-data"))
 (def pidfile "Cockroach PID file" (str working-path "/pid"))
 
 ; Logs
-(def log-path "Log directory" (str working-path "/logs"))
+(def log-path "Log directory" (str store-path "/logs"))
 (def verlog "Version log file" (str log-path "/version.txt"))
 (def pcaplog "pcap log file" (str log-path "/trace.pcap"))
 (def errlog (str log-path "/cockroach.stderr"))
@@ -87,7 +88,7 @@
 
 (defmacro csql! [& body]
   "Execute SQL statements using the cockroach sql CLI."
-  `(c/cd working-path
+  `(c/cd binary-path
          (c/exec
           (concat
            [cockroach :sql]
@@ -102,7 +103,7 @@
    (replication-zone ".default"))
   ([name]
    (yaml/parse-string
-     (c/cd working-path
+     (c/cd binary-path
            (c/exec cockroach :zone :get name (when insecure :--insecure))))))
 
 (defn set-replication-zone!
@@ -110,7 +111,7 @@
   zone."
   [name zone]
   (c/sudo cockroach-user
-          (-> (c/cd working-path
+          (-> (c/cd binary-path
                     (c/exec :echo (yaml/generate-string zone) |
                             cockroach :zone :set
                             (when insecure :--insecure)
@@ -163,11 +164,10 @@
     :start-stop-daemon
     :--start :--background
     :--make-pidfile
-    :--remove-pidfile
     :--pidfile pidfile
     :--no-close
     :--chuid cockroach-user
-    :--chdir working-path
+    :--chdir binary-path
     :--exec (c/expand-path cockroach)
     :--]
    cockroach-start-arguments
@@ -215,9 +215,11 @@
 (defn reset-clock!
   "Reset clock on this host. Logs output."
   []
-  (info c/*host* "clock reset:" (c/su (c/exec :ntpdate :-b ntpserver))))
+  ;; (info c/*host* "clock reset:" (c/su (c/exec :ntpdate :-b ntpserver)))
+  )
 
 (defn reset-clocks!
   "Reset all clocks on all nodes in a test"
   [test]
-  (c/with-test-nodes test (reset-clock!)))
+  ;; (c/with-test-nodes test (reset-clock!))
+  )
